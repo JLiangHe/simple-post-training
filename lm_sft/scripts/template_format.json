@@ -1,0 +1,17 @@
+{
+    "system_prompt": {
+      "prefix": "<|im_start|>system\n",
+      "suffix": "<|im_end|>\n"
+    },
+    "user_turn": {
+      "prefix": "<|im_start|>user\n",
+      "suffix": "<|im_end|>\n"
+    },
+    "assistant_turn": {
+      "prefix": "<|im_start|>assistant\n",
+      "suffix": "<|im_end|>\n"
+    },
+    "added_tokens": ["<|im_start|>", "<|im_start|>system", "<|im_start|>user", "<|im_start|>assistant", "<|im_end|>"],
+    "bos_token": "<|im_start|>",
+    "eos_token": "<|im_end|>"
+  }

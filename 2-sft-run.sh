@@ -1,0 +1,31 @@
+# Tested with 2 & 4 GPUs
+
+set -x
+
+
+nproc_per_node=1
+
+# Shift the arguments so $@ refers to the rest
+shift 2
+
+torchrun --standalone --nnodes=1 --nproc_per_node=$nproc_per_node \
+     -m verl.trainer.fsdp_sft_trainer \
+    data.train_files=/gpfs/radev/home/jh3439/project/lm_sft/data/processed_data/train.parquet \
+    data.val_files=/gpfs/radev/home/jh3439/project/lm_sft/data/processed_data/test.parquet \
+    data.multiturn.enable=true \
+    data.multiturn.messages_key=messages \
+    data.micro_batch_size=1 \
+    data.train_batch_size=32 \
+    data.max_length=1024 \
+    data.truncation=right \
+    model.partial_pretrain=/gpfs/radev/home/jh3439/project/lm_sft/data/processed_models/meta-llama_Llama-3.1-8B\
+    model.enable_gradient_checkpointing=true \
+    model.fsdp_config.cpu_offload=false \
+    model.fsdp_config.offload_params=false \
+    model.fsdp_config.model_dtype=bfloat16 \
+    trainer.default_local_dir=/gpfs/radev/home/jh3439/project/lm_sft/results/meta-llama_Llama-3.1-8B\
+    trainer.project_name=multiturn-sft \
+    trainer.experiment_name=multiturn-sft-qwen-2.5-0.5b-instruct-sp2 \
+    trainer.default_hdfs_dir=null $@ \
+    ulysses_sequence_parallel_size=1 \
+    use_remove_padding=true

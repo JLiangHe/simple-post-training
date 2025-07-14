@@ -1,0 +1,70 @@
+data:
+  train_batch_size: 256  # default: 256, global training batch size
+  micro_batch_size: null # deprecated, use micro_batch_size_per_gpu instead
+  micro_batch_size_per_gpu: 4  # default: 4, per-GPU batch size for training and validation
+  #train_files: ~/data/gsm8k/trainno  # default: ~/data/gsm8k/train.parquet, training data path, TODO(auto-fill)
+  #val_files: ~/data/gsm8k/test.parquet  # default: ~/data/gsm8k/test.parquet, validation data path, TODO(auto-fill)
+  # Single-turn settings
+  prompt_key: question  # default: question, dataset key for prompts/instructions
+  response_key: answer  # default: answer, dataset key for responses/outputs
+  prompt_dict_keys: null  # default: null, for nested dict access in prompts
+  response_dict_keys: null  # default: null, for nested dict access in responses
+  # Multi-turn settings
+  multiturn:
+    enable: false  # default: false, enable for conversation datasets
+    messages_key: messages  # default: messages, key for conversation messages list
+    tools_key: tools  # default: tools, key for tool usage list
+    enable_thinking_key: enable_thinking  # default: enable_thinking, key for reasoning traces
+  max_length: 1024  # default: 1024, maximum sequence length in tokens
+  truncation: error  # default: error, handling overlong sequences (error/truncate_left/truncate_right)
+  balance_dp_token: False  # default: False, balance tokens across data parallel ranks
+  custom_cls:
+    path: null  # default: null, path to custom dataset class file
+    name: null  # default: null, custom dataset class name
+  use_shm: False  # default: False, use shared memory for data loading
+
+model:
+  #partial_pretrain: ~/models/gemma-1.1-7b-it  # default: ~/models/gemma-1.1-7b-it, base model path, TODO(auto-fill)
+  use_shm: False  # default: False, use shared memory for model loading
+  fsdp_config:
+    model_dtype: fp32  # default: fp32, model precision (fp32/fp16/bfloat16)
+    wrap_policy:
+      min_num_params: 0  # default: 0, minimum parameters to wrap in FSDP
+    cpu_offload: False  # default: False, offload to CPU to save GPU memory
+    offload_params: False  # default: False, offload parameters to CPU
+  external_lib: null  # default: null, external library for custom models
+  enable_gradient_checkpointing: True  # default: True, trade compute for memory
+  trust_remote_code: False  # default: False, allow custom model code execution
+  lora_rank: 0  # default: 0, LoRA rank (0=disabled, typical values: 8/16/32)
+  lora_alpha: 16  # default: 16, LoRA scaling factor
+  target_modules: all-linear  # default: all-linear, LoRA target modules (all-linear or specific list)
+  use_liger: False  # default: False, enable Liger kernel optimizations
+  strategy: fsdp2  # default: fsdp2, training strategy
+
+optim:
+  lr: 1e-5  # default: 1e-5, learning rate
+  betas: [0.9, 0.95]  # default: [0.9, 0.95], Adam beta parameters
+  weight_decay: 0.01  # default: 0.01, L2 regularization weight
+  warmup_steps_ratio: 0.1  # default: 0.1, fraction of total steps for LR warmup
+  clip_grad: 1.0  # default: 1.0, gradient clipping threshold
+  lr_scheduler: cosine  # default: cosine, LR scheduler type (cosine/linear/constant)
+
+ulysses_sequence_parallel_size: 1  # default: 1, sequence parallelism factor
+use_remove_padding: False  # default: False, remove padding for efficiency (llama/mistral/gemma1/qwen)
+
+trainer:
+  default_local_dir: checkpoints/${trainer.project_name}/${trainer.experiment_name}  # default: checkpoints/${trainer.project_name}/${trainer.experiment_name}, local checkpoint directory
+  default_hdfs_dir: null  # default: null, HDFS checkpoint directory for distributed storage
+  resume_path: null  # default: null, path to resume from specific checkpoint
+  project_name: gsm8k-sft  # default: gsm8k-sft, project name for experiment tracking
+  experiment_name: test  # default: test, experiment name for tracking
+  total_epochs: 4  # default: 4, number of training epochs
+  total_training_steps: null  # default: null, total steps (overrides epochs if set)
+  logger: [ 'console', 'wandb' ]  # default: ['console', 'wandb'], logging backends
+  seed: 1  # default: 1, random seed for reproducibility
+
+  save_freq: -1  # default: -1, checkpoint frequency (-1=epoch end, N=every N steps)
+  test_freq: -1  # default: -1, validation frequency (-1=disabled, N=every N steps)
+  nnodes: 1  # default: 1, number of nodes for distributed training
+  n_gpus_per_node: 8  # default: 8, GPUs per node
+  max_ckpt_to_keep: null  # default: null, maximum checkpoints to retain

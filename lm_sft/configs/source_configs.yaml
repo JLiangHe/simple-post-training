@@ -1,0 +1,20 @@
+# Data source settings
+data:
+  input_path: "/gpfs/radev/project/zhuoran_yang/shared/datasets"
+  output_path: "data/processed_data"
+  dataset_name:
+    - openhermes2_5
+    - softageai
+  train_split: 0.9
+
+# Model settings
+model:
+  source_model_path: "/gpfs/radev/project/zhuoran_yang/shared/saved_lm"
+  extended_model_path: "data/processed_models"
+  model_name: "meta-llama_Llama-3.1-8B"
+  torch_dtype: "bfloat16"  # Options: float32, float16, bfloat16
+
+template:
+  path: "scripts/template_format.json"
+
+working_dir: "/gpfs/radev/home/jh3439/project/lm_sft"
