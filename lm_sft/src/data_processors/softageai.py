@@ -163,9 +163,9 @@ def main():
     
     configs = load_config()
     
-    DATASET = "/gpfs/radev/project/zhuoran_yang/shared/datasets/SoftAge-AI_multi-turn_dataset/Multi-turn prompts.parquet"
+    DATASET = configs.source.data.input_path +"/SoftAge-AI_multi-turn_dataset/Multi-turn prompts.parquet"
     TEMPLATE = configs.source.template.path
-    OUTPUT = configs.source.data.output_path + "/softageai.parquet"
+    OUTPUT = configs.source.data.output_path + "/SoftAge-AI/multi-turn_dataset.parquet"
 
     print(f"\nConfiguration:")
     print(f"  Input Dataset: {DATASET}")
