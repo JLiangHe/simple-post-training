@@ -6,3 +6,4 @@ results/
 wandb/
 slurm_output/
 outputs/
+lm_sft/notebooks/

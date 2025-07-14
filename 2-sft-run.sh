@@ -15,9 +15,9 @@ module load miniconda
 source ~/.bashrc
 conda activate llm_base
 
-# Change to the script's directory and then to lm_sft
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-WORKING_DIR="$SCRIPT_DIR/lm_sft"
+# Use absolute path to the project directory
+PROJECT_DIR="/home/jh3439/project_pi_zy279/jh3439/simple-post-training"
+WORKING_DIR="$PROJECT_DIR/lm_sft"
 cd "$WORKING_DIR"
 
 # Add the current directory to Python path so src module can be found
