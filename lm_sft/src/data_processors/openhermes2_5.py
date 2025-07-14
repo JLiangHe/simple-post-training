@@ -161,7 +161,7 @@ def main():
     
     DATASET = configs.source.data.input_path + "/teknium_OpenHermes-2.5/openhermes2_5.json"
     TEMPLATE = configs.source.template.path
-    OUTPUT = configs.source.data.output_path + "/openhermes2_5.parquet"
+    OUTPUT = configs.source.data.output_path + "/teknium/OpenHermes-2.5.parquet"
 
     print(f"\nConfiguration:")
     print(f"  Input Dataset: {DATASET}")
