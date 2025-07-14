@@ -1,12 +1,24 @@
+source ~/.bashrc
 conda activate llm_base
 
-cd /gpfs/radev/home/jh3439/project/lm_sft
+# Change to the script's directory
+cd "$(dirname "$0")/lm_sft"
 
-python src.hf_downloader.py --folder /gpfs/radev/project/zhuoran_yang/shared/datasets --type dataset teknium/OpenHermes-2.5
-python src.hf_downloader.py --folder /gpfs/radev/project/zhuoran_yang/shared/datasets --type dataset SoftAge-AI/multi-turn_dataset
+# Load configuration
+DATA_INPUT_PATH=$(python -m src.config_manager source.data.input_path)
+DATASET_NAMES_STR=$(python -m src.config_manager source.data.dataset_name)
 
+# Download datasets
+# IFS=' ' read -r -a DATASET_NAMES_ARR <<< "$DATASET_NAMES_STR"
+# for dataset in "${DATASET_NAMES_ARR[@]}"; do
+#     python src/hf_downloader.py --folder "$DATA_INPUT_PATH" --type dataset "$dataset"
+# done
+
+# Process data
 python -m src.data_processors.openhermes2_5
 python -m src.data_processors.softageai
 python -m src.data_processors.aggregate_and_split
 
+
+# Process model
 python -m src.model_processor

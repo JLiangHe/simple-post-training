@@ -1,0 +1,65 @@
+Total training steps: 56
+Epoch 1/4:   0%|                                                                                                        | 0/14 [00:00<?, ?it/s]/gpfs/radev/home/jh3439/.conda/envs/llm_base/lib/python3.10/site-packages/torch/utils/data/dataloader.py:624: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 1, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(
+step:1 - train/loss:1.3431185483932495 - train/lr(1e-3):0.0020000000000000005
+Epoch 1/4: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 14/14 [06:24<00:00, 27.49s/it]
+step:2 - train/loss:1.217541217803955 - train/lr(1e-3):0.004000000000000001
+step:3 - train/loss:1.2002665996551514 - train/lr(1e-3):0.006
+step:4 - train/loss:1.4259620904922485 - train/lr(1e-3):0.008000000000000002
+step:5 - train/loss:1.1362347602844238 - train/lr(1e-3):0.01
+step:6 - train/loss:1.0159581899642944 - train/lr(1e-3):0.009990516643685221
+step:7 - train/loss:0.8970320224761963 - train/lr(1e-3):0.00996210254835968
+step:8 - train/loss:1.1495318412780762 - train/lr(1e-3):0.00991486549841951
+step:9 - train/loss:0.9235799312591553 - train/lr(1e-3):0.00984898468017505
+step:10 - train/loss:0.9675178527832031 - train/lr(1e-3):0.009764710002135784
+step:11 - train/loss:0.9090712070465088 - train/lr(1e-3):0.00966236114702178
+step:12 - train/loss:0.8317917585372925 - train/lr(1e-3):0.009542326359097618
+step:13 - train/loss:1.0210468769073486 - train/lr(1e-3):0.009405060971428923
+step:14 - train/loss:1.249951720237732 - train/lr(1e-3):0.009251085678648073
+Epoch 2/4: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 14/14 [06:17<00:00, 26.95s/it]
+step:15 - train/loss:0.9333041310310364 - train/lr(1e-3):0.00908098456178111
+step:16 - train/loss:0.8977435827255249 - train/lr(1e-3):0.008895402872628352
+step:17 - train/loss:0.9909781813621521 - train/lr(1e-3):0.008695044586103297
+step:18 - train/loss:0.8193747997283936 - train/lr(1e-3):0.008480669729814634
+step:19 - train/loss:1.043271780014038 - train/lr(1e-3):0.008253091501021211
+step:20 - train/loss:0.8715577721595764 - train/lr(1e-3):0.008013173181896283
+step:21 - train/loss:0.7885544896125793 - train/lr(1e-3):0.00776182486480253
+step:22 - train/loss:0.7964100241661072 - train/lr(1e-3):0.0075000000000000015
+step:23 - train/loss:0.6459288001060486 - train/lr(1e-3):0.0072286917788826925
+step:24 - train/loss:0.8347897529602051 - train/lr(1e-3):0.006948929366463397
+step:25 - train/loss:0.8179304599761963 - train/lr(1e-3):0.006661773997398299
+step:26 - train/loss:0.7626898884773254 - train/lr(1e-3):0.006368314950360416
+step:27 - train/loss:0.9007819294929504 - train/lr(1e-3):0.006069665416032487
+step:28 - train/loss:0.8012914061546326 - train/lr(1e-3):0.005766958274393428
+Epoch 3/4: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 14/14 [06:18<00:00, 27.02s/it]
+step:29 - train/loss:0.8332562446594238 - train/lr(1e-3):0.00546134179731651
+step:30 - train/loss:0.7158552408218384 - train/lr(1e-3):0.005153975292780852
+step:31 - train/loss:0.7983881831169128 - train/lr(1e-3):0.0048460247072191496
+step:32 - train/loss:0.7101045250892639 - train/lr(1e-3):0.004538658202683491
+step:33 - train/loss:0.6585973501205444 - train/lr(1e-3):0.004233041725606573
+step:34 - train/loss:0.6719450354576111 - train/lr(1e-3):0.003930334583967514
+step:35 - train/loss:0.6891046762466431 - train/lr(1e-3):0.0036316850496395862
+step:36 - train/loss:0.6581116318702698 - train/lr(1e-3):0.003338226002601703
+step:37 - train/loss:0.7462559342384338 - train/lr(1e-3):0.0030510706335366033
+step:38 - train/loss:0.8461782336235046 - train/lr(1e-3):0.002771308221117309
+step:39 - train/loss:0.7037950754165649 - train/lr(1e-3):0.0025000000000000014
+step:40 - train/loss:0.8044741749763489 - train/lr(1e-3):0.002238175135197471
+step:41 - train/loss:0.5826271772384644 - train/lr(1e-3):0.0019868268181037186
+step:42 - train/loss:0.8690499067306519 - train/lr(1e-3):0.001746908498978791
+Epoch 4/4:  93%|████████████████████████████████████████████████████████████████████████████████████████▏      | 13/14 [07:41<00:35, 35.46s/it]
+step:43 - train/loss:0.7898514866828918 - train/lr(1e-3):0.0015193302701853673
+step:44 - train/loss:0.7179380655288696 - train/lr(1e-3):0.0013049554138967053
+step:45 - train/loss:0.6969587206840515 - train/lr(1e-3):0.0011045971273716476
+step:46 - train/loss:0.6736028790473938 - train/lr(1e-3):0.0009190154382188921
+step:47 - train/loss:0.7718270421028137 - train/lr(1e-3):0.0007489143213519301
+step:48 - train/loss:0.8197416663169861 - train/lr(1e-3):0.0005949390285710776
+step:49 - train/loss:0.6659168004989624 - train/lr(1e-3):0.0004576736409023813
+step:50 - train/loss:0.7979502081871033 - train/lr(1e-3):0.00033763885297822155
+step:51 - train/loss:0.6480872631072998 - train/lr(1e-3):0.00023528999786421757
+step:52 - train/loss:0.7665124535560608 - train/lr(1e-3):0.0001510153198249531
+step:53 - train/loss:0.8316138982772827 - train/lr(1e-3):8.513450158049109e-05
+step:54 - train/loss:0.7074826955795288 - train/lr(1e-3):3.7897451640321326e-05
+step:55 - train/loss:0.717391312122345 - train/lr(1e-3):9.48335631477948e-06
+step:56 - train/loss:0.726990282535553 - train/lr(1e-3):0.0
+step:56 - val/loss:1.054813265800476
+Final validation metrics: {'val/loss': 1.054813265800476}

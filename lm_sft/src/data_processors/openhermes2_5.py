@@ -7,7 +7,7 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 from src.config_manager import load_config
 from src.data_processors.data_utils import convert_dataframe_to_messages
 
-SAMPLE_SIZE = 1000  
+SAMPLE_SIZE = 10000  
 
 
 def process_raw_conversations(dataset_path: str) -> pd.DataFrame:

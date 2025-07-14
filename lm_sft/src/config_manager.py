@@ -1,4 +1,3 @@
-
 import yaml
 from pathlib import Path
 import re
@@ -53,3 +52,24 @@ def load_config():
                 config_root[attr_name] = AttrDict.from_dict(data)
 
     return config_root
+
+if __name__ == '__main__':
+    import sys
+    # Example of how to use the config loader
+    configs = load_config()
+    if len(sys.argv) > 1:
+        # Specific config value requested
+        key_path = sys.argv[1]
+        keys = key_path.split('.')
+        value = configs
+        try:
+            for key in keys:
+                value = value[key]
+            if isinstance(value, list):
+                print(" ".join(map(str, value)))
+            else:
+                print(value)
+        except (KeyError, TypeError):
+            sys.exit(f"Error: Config value '{key_path}' not found.")
+    else:
+        print(configs)

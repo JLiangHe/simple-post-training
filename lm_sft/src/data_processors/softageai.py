@@ -121,7 +121,7 @@ def process_and_save_conversations(
     print("Starting data processing...")
     
     # Step 1: Load and process the raw data
-    df = process_raw_conversations(dataset_path)
+    df = process_raw_conversations(dataset_path).iloc[:SAMPLE_SIZE]
     print(f"Successfully loaded and processed {len(df)} conversations.")
     
     # Step 2: Format the data using the template (column-wise)

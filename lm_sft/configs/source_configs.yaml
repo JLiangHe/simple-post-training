@@ -3,8 +3,8 @@ data:
   input_path: "/gpfs/radev/project/zhuoran_yang/shared/datasets"
   output_path: "data/processed_data"
   dataset_name:
-    - openhermes2_5
-    - softageai
+    - teknium/OpenHermes-2.5
+    - SoftAge-AI/multi-turn_dataset
   train_split: 0.9
 
 # Model settings
