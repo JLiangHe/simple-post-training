@@ -1,6 +1,6 @@
 # Data source settings
 data:
-  input_path: "/home/jh3439/project_pi_zy279/jh3439/saved_data"
+  input_path: "/gpfs/radev/project/zhuoran_yang/shared/datasets"
   output_path: "data/processed_data"
   dataset_name:
     - teknium/OpenHermes-2.5
@@ -9,7 +9,7 @@ data:
 
 # Model settings
 model:
-  source_model_path: "/home/jh3439/project_pi_zy279/jh3439/saved_models"
+  source_model_path: "/gpfs/radev/project/zhuoran_yang/shared/saved_lm"
   extended_model_path: "data/processed_models"
   model_name: "meta-llama_Llama-3.1-8B"
   torch_dtype: "bfloat16"  # Options: float32, float16, bfloat16

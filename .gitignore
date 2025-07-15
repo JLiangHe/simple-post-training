@@ -1,9 +1,10 @@
 __pycache__/
 *.py[cod]
 
-data/
-results/
-wandb/
-slurm_output/
-outputs/
+lm_sft/data/
+lm_sft/results/
+lm_sft/wandb/
+lm_sft/outputs/
 lm_sft/notebooks/
+
+slurm_output/

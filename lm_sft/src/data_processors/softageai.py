@@ -39,68 +39,68 @@ def process_raw_conversations(dataset_path: str) -> pd.DataFrame:
     df = df.rename(columns=column_mapping)
     return df
 
-def format_chat_data(df: pd.DataFrame, template_path: str) -> pd.DataFrame:
-    """
-    Formats chat data in a DataFrame according to a specified JSON template.
-    Reads through all columns and applies appropriate templates.
+# def format_chat_data(df: pd.DataFrame, template_path: str) -> pd.DataFrame:
+#     """
+#     Formats chat data in a DataFrame according to a specified JSON template.
+#     Reads through all columns and applies appropriate templates.
 
-    Args:
-        df (pd.DataFrame): The DataFrame containing conversation turns.
-        template_path (str): The path to the JSON file with the formatting template.
+#     Args:
+#         df (pd.DataFrame): The DataFrame containing conversation turns.
+#         template_path (str): The path to the JSON file with the formatting template.
 
-    Returns:
-        pd.DataFrame: A DataFrame with formatted columns.
-    """
-    # if not os.path.exists(template_path):
-    #     raise FileNotFoundError(f"Error: The template file was not found at {template_path}")
+#     Returns:
+#         pd.DataFrame: A DataFrame with formatted columns.
+#     """
+#     # if not os.path.exists(template_path):
+#     #     raise FileNotFoundError(f"Error: The template file was not found at {template_path}")
 
-    # with open(template_path, "r") as f:
-    #     chat_template = json.load(f)
+#     # with open(template_path, "r") as f:
+#     #     chat_template = json.load(f)
 
-    # required_keys = ["system_prompt", "user_turn", "assistant_turn"]
-    # if not all(key in chat_template for key in required_keys):
-    #     raise KeyError("Template file is missing required keys: 'system_prompt', 'user_turn', 'assistant_turn'")
+#     # required_keys = ["system_prompt", "user_turn", "assistant_turn"]
+#     # if not all(key in chat_template for key in required_keys):
+#     #     raise KeyError("Template file is missing required keys: 'system_prompt', 'user_turn', 'assistant_turn'")
 
-    def format_multiturn_chat(df):
-        """
-        Reads through all columns of DataFrame and applies appropriate templates.
-        Handles column order: user_1, assistant_1, user_2, assistant_2, ..., system
-        Returns a DataFrame with formatted columns.
-        """
-        # system_prompt = chat_template["system_prompt"]
-        # user_turn = chat_template["user_turn"]
-        # assistant_turn = chat_template["assistant_turn"]
+#     def format_multiturn_chat(df):
+#         """
+#         Reads through all columns of DataFrame and applies appropriate templates.
+#         Handles column order: user_1, assistant_1, user_2, assistant_2, ..., system
+#         Returns a DataFrame with formatted columns.
+#         """
+#         # system_prompt = chat_template["system_prompt"]
+#         # user_turn = chat_template["user_turn"]
+#         # assistant_turn = chat_template["assistant_turn"]
         
-        # # Create a copy of the DataFrame to store formatted results
-        # formatted_df = df.copy()
+#         # # Create a copy of the DataFrame to store formatted results
+#         # formatted_df = df.copy()
         
-        # # Loop through all columns in the DataFrame
-        # for column in df.columns:
-        #     if column == "system":
-        #         # Apply system template
-        #         formatted_df[column] = df[column].apply(
-        #             lambda x: f"{system_prompt['prefix']}{x}{system_prompt['suffix']}" 
-        #             if pd.notna(x) and x else f"{system_prompt['prefix']}{system_prompt['suffix']}"
-        #         )
-        #     elif column.startswith("user_"):
-        #         # Apply user template
-        #         formatted_df[column] = df[column].apply(
-        #             lambda x: f"{user_turn['prefix']}{x}{user_turn['suffix']}" 
-        #             if pd.notna(x) and x else ""
-        #         )
-        #     elif column.startswith("assistant_"):
-        #         # Apply assistant template
-        #         formatted_df[column] = df[column].apply(
-        #             lambda x: f"{assistant_turn['prefix']}{x}{assistant_turn['suffix']}" 
-        #             if pd.notna(x) and x else ""
-        #         )
-        #     # For any other columns, keep as is
-        #     else:
-        #         formatted_df[column] = df[column]
+#         # # Loop through all columns in the DataFrame
+#         # for column in df.columns:
+#         #     if column == "system":
+#         #         # Apply system template
+#         #         formatted_df[column] = df[column].apply(
+#         #             lambda x: f"{system_prompt['prefix']}{x}{system_prompt['suffix']}" 
+#         #             if pd.notna(x) and x else f"{system_prompt['prefix']}{system_prompt['suffix']}"
+#         #         )
+#         #     elif column.startswith("user_"):
+#         #         # Apply user template
+#         #         formatted_df[column] = df[column].apply(
+#         #             lambda x: f"{user_turn['prefix']}{x}{user_turn['suffix']}" 
+#         #             if pd.notna(x) and x else ""
+#         #         )
+#         #     elif column.startswith("assistant_"):
+#         #         # Apply assistant template
+#         #         formatted_df[column] = df[column].apply(
+#         #             lambda x: f"{assistant_turn['prefix']}{x}{assistant_turn['suffix']}" 
+#         #             if pd.notna(x) and x else ""
+#         #         )
+#         #     # For any other columns, keep as is
+#         #     else:
+#         #         formatted_df[column] = df[column]
         
-        return df
+#         return df
 
-    return format_multiturn_chat(df)
+#     return format_multiturn_chat(df)
 
 def process_and_save_conversations(
     dataset_path: str,
@@ -121,11 +121,11 @@ def process_and_save_conversations(
     print("Starting data processing...")
     
     # Step 1: Load and process the raw data
-    df = process_raw_conversations(dataset_path).iloc[:SAMPLE_SIZE]
-    print(f"Successfully loaded and processed {len(df)} conversations.")
+    formatted_df = process_raw_conversations(dataset_path).iloc[:SAMPLE_SIZE]
+    print(f"Successfully loaded and processed {len(formatted_df)} conversations.")
     
     # Step 2: Format the data using the template (column-wise)
-    formatted_df = format_chat_data(df, template_path)
+    #formatted_df = format_multiturn_chat(df)#format_chat_data(df, template_path)
     json_output = convert_dataframe_to_messages_multiturn(formatted_df)
     print("Formatting applied successfully.")
 

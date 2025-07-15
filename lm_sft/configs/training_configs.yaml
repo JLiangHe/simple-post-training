@@ -2,8 +2,6 @@ data:
   train_batch_size: 256  # default: 256, global training batch size
   micro_batch_size: null # deprecated, use micro_batch_size_per_gpu instead
   micro_batch_size_per_gpu: 4  # default: 4, per-GPU batch size for training and validation
-  #train_files: ~/data/gsm8k/trainno  # default: ~/data/gsm8k/train.parquet, training data path, TODO(auto-fill)
-  #val_files: ~/data/gsm8k/test.parquet  # default: ~/data/gsm8k/test.parquet, validation data path, TODO(auto-fill)
   # Single-turn settings
   prompt_key: question  # default: question, dataset key for prompts/instructions
   response_key: answer  # default: answer, dataset key for responses/outputs
@@ -24,7 +22,6 @@ data:
   use_shm: False  # default: False, use shared memory for data loading
 
 model:
-  #partial_pretrain: ~/models/gemma-1.1-7b-it  # default: ~/models/gemma-1.1-7b-it, base model path, TODO(auto-fill)
   use_shm: False  # default: False, use shared memory for model loading
   fsdp_config:
     model_dtype: fp32  # default: fp32, model precision (fp32/fp16/bfloat16)

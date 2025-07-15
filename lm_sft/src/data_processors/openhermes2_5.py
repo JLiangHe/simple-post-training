@@ -56,43 +56,43 @@ def process_raw_conversations(dataset_path: str) -> pd.DataFrame:
 
     return pd.DataFrame(processed_data)
 
-def format_chat_data(df: pd.DataFrame, template_path: str) -> pd.Series:
-    """
-    Formats chat data in a DataFrame according to a specified JSON template.
+# def format_chat_data(df: pd.DataFrame, template_path: str) -> pd.Series:
+#     """
+#     Formats chat data in a DataFrame according to a specified JSON template.
 
-    Args:
-        df (pd.DataFrame): The DataFrame containing conversation turns.
-        template_path (str): The path to the JSON file with the formatting template.
+#     Args:
+#         df (pd.DataFrame): The DataFrame containing conversation turns.
+#         template_path (str): The path to the JSON file with the formatting template.
 
-    Returns:
-        pd.Series: A pandas Series containing the formatted text for each row.
-    """
-    if not os.path.exists(template_path):
-        raise FileNotFoundError(f"Error: The template file was not found at {template_path}")
+#     Returns:
+#         pd.Series: A pandas Series containing the formatted text for each row.
+#     """
+#     if not os.path.exists(template_path):
+#         raise FileNotFoundError(f"Error: The template file was not found at {template_path}")
 
-    with open(template_path, "r") as f:
-        chat_template = json.load(f)
+#     with open(template_path, "r") as f:
+#         chat_template = json.load(f)
 
-    required_keys = ["system_prompt", "user_turn", "assistant_turn"]
-    if not all(key in chat_template for key in required_keys):
-        raise KeyError("Template file is missing required keys: 'system_prompt', 'user_turn', 'assistant_turn'")
+#     required_keys = ["system_prompt", "user_turn", "assistant_turn"]
+#     if not all(key in chat_template for key in required_keys):
+#         raise KeyError("Template file is missing required keys: 'system_prompt', 'user_turn', 'assistant_turn'")
 
-    def format_single_row(row: pd.Series) -> str:
-        system_prompt = chat_template["system_prompt"]
-        user_turn = chat_template["user_turn"]
-        assistant_turn = chat_template["assistant_turn"]
+#     def format_single_row(row: pd.Series) -> str:
+#         system_prompt = chat_template["system_prompt"]
+#         user_turn = chat_template["user_turn"]
+#         assistant_turn = chat_template["assistant_turn"]
      
-        # Conditionally add the system prompt only if it's a valid, non-empty string.
-        formatted_text_system = f"{system_prompt['prefix']}{system_prompt['suffix']}"
-        if pd.notna(row["system"]) and row["system"]:
-            formatted_text_system = f"{system_prompt['prefix']}{row['system']}{system_prompt['suffix']}"
+#         # Conditionally add the system prompt only if it's a valid, non-empty string.
+#         formatted_text_system = f"{system_prompt['prefix']}{system_prompt['suffix']}"
+#         if pd.notna(row["system"]) and row["system"]:
+#             formatted_text_system = f"{system_prompt['prefix']}{row['system']}{system_prompt['suffix']}"
     
-        formatted_text_user = f"{user_turn['prefix']}{row['human']}{user_turn['suffix']}"
-        formatted_text_assistant = f"{assistant_turn['prefix']}{row['gpt']}{assistant_turn['suffix']}"
+#         formatted_text_user = f"{user_turn['prefix']}{row['human']}{user_turn['suffix']}"
+#         formatted_text_assistant = f"{assistant_turn['prefix']}{row['gpt']}{assistant_turn['suffix']}"
     
-        return formatted_text_system, formatted_text_user, formatted_text_assistant
+#         return formatted_text_system, formatted_text_user, formatted_text_assistant
 
-    return df.apply(format_single_row, axis=1)
+#     return df.apply(format_single_row, axis=1)
 
 def process_and_save_conversations(
     dataset_path: str,
@@ -187,6 +187,4 @@ def main():
         print(f"Error: {e}")
 
 if __name__ == '__main__':
-    # This block allows the script to be run directly from the command line.
-    # It will process the data, save it, and print the first 5 rows.
     main()
