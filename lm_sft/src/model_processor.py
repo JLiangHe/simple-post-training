@@ -7,33 +7,7 @@ from src.config_manager import load_config
 
 config = load_config()
 
-def generate_jinja2_template(template_data):
-    """
-    Converts template data into a Jinja2 chat template string.
-    """
-    system_prefix = template_data.get("system_prompt", {}).get("prefix", "")
-    system_suffix = template_data.get("system_prompt", {}).get("suffix", "")
-    user_prefix = template_data.get("user_turn", {}).get("prefix", "")
-    user_suffix = template_data.get("user_turn", {}).get("suffix", "")
-    assistant_prefix = template_data.get("assistant_turn", {}).get("prefix", "")
-    assistant_suffix = template_data.get("assistant_turn", {}).get("suffix", "")
-    
-    jinja_template = f"""{{%- for message in messages %}}
-    {{%- if message['role'] == 'system' %}}
-{system_prefix}{{{{ message['content'] }}}}{system_suffix}
-    {{%- elif message['role'] == 'user' %}}
-{user_prefix}{{{{ message['content'] }}}}{user_suffix}
-    {{%- elif message['role'] == 'assistant' %}}
-{assistant_prefix}{{{{ message['content'] }}}}{assistant_suffix}
-    {{%- endif %}}
-{{%- endfor %}}
-{{%- if add_generation_prompt %}}
-{assistant_prefix}
-{{%- endif %}}"""
-    
-    return jinja_template.strip()
-
-def update_tokenizer_config(target_path, template_data, jinja_template):
+def update_tokenizer_config(target_path, template_data):
     """
     Updates the tokenizer_config.json with chat template and special tokens.
     """
@@ -47,7 +21,8 @@ def update_tokenizer_config(target_path, template_data, jinja_template):
         tokenizer_config = {}
     
     # Add chat template
-    tokenizer_config["chat_template"] = jinja_template
+    if "chat_template" in template_data:
+        tokenizer_config["chat_template"] = template_data["chat_template"]
     
     # Override bos_token and eos_token if specified
     if "bos_token" in template_data and template_data["bos_token"]:
@@ -127,25 +102,16 @@ def process_model():
         print(f"Error saving model/tokenizer to {target_path}: {e}")
         return
 
-    # --- 5. Generate Jinja2 Template ---
-    print("Generating Jinja2 chat template...")
-    try:
-        jinja_template = generate_jinja2_template(template)
-        print("Jinja2 template generated successfully")
-    except Exception as e:
-        print(f"Error generating Jinja2 template: {e}")
-        return
-
-    # --- 6. Update tokenizer_config.json with Chat Template and Special Tokens ---
+    # --- 5. Update tokenizer_config.json with Chat Template and Special Tokens ---
     print("Updating tokenizer_config.json...")
     try:
-        update_tokenizer_config(target_path, template, jinja_template)
+        update_tokenizer_config(target_path, template)
         print("tokenizer_config.json updated successfully")
     except Exception as e:
         print(f"Error updating tokenizer_config.json: {e}")
         return
 
-    print("All processing steps completed successfully!")
+    
 
 if __name__ == "__main__":
     process_model()
