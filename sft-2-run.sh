@@ -22,7 +22,7 @@ WORKING_DIR="$PROJECT_DIR/lm_sft"
 cd "$WORKING_DIR"
 
 # Add the current directory to Python path so src module can be found
-export PYTHONPATH="$PWD:$PYTHONPATH"
+export PYTHONPATH="$PWD:$PROJECT_DIR/verl:$PYTHONPATH"
 export PYTHONUNBUFFERED=1
 
 DATA_PATH=$WORKING_DIR/$(python -m src.config_manager source.data.output_path)
@@ -34,10 +34,10 @@ TIMESTAMP=$(date +%Y%m%d-%H%M%S)
 set -x
 
 # TRAIN_BATCH_SIZE / (NPROC_PER_NODE * MICRO_BATCH_SIZE_PER_GPU) should be an integer
-NPROC_PER_NODE=3
-MICRO_BATCH_SIZE_PER_GPU=5
-TRAIN_BATCH_SIZE=180
-MAX_LENGTH=4096
+NPROC_PER_NODE=1
+MICRO_BATCH_SIZE_PER_GPU=1
+TRAIN_BATCH_SIZE=64
+MAX_LENGTH=1024
 TOTAL_EPOCHS=2
 
 # Check if required directories exist
@@ -72,6 +72,7 @@ torchrun --standalone --nnodes=1 --nproc_per_node=$NPROC_PER_NODE \
     data.train_batch_size=$TRAIN_BATCH_SIZE \
     data.max_length=$MAX_LENGTH\
     data.truncation=right \
+    data.dataloader_num_workers=1 \
     optim.lr=5e-6 \
     model.partial_pretrain=$MODEL_PATH/$MODEL_NAME\
     model.enable_gradient_checkpointing=true \
@@ -85,4 +86,4 @@ torchrun --standalone --nnodes=1 --nproc_per_node=$NPROC_PER_NODE \
     trainer.total_epochs=$TOTAL_EPOCHS \
     trainer.default_hdfs_dir=null $@ \
     ulysses_sequence_parallel_size=1 \
-    use_remove_padding=true
+    use_remove_padding=true 
