@@ -1,11 +1,11 @@
 #!/bin/bash
-#SBATCH --job-name=lm-sft     # Name of your job (will appear in squeue)
-#SBATCH --partition=gpu            # Which partition/queue to submit to (gpu partition for GPU jobs)
+#SBATCH --job-name=lm-sft               # Name of your job (will appear in squeue)
+#SBATCH --partition=gpu                 # Which partition/queue to submit to (gpu partition for GPU jobs)
 #SBATCH --qos=qos_zhuoran_yang          # Quality of Service - our group's priority access tag
 #SBATCH --gres=gpu:h100:3               # Generic RESource - request 1 H100 GPU specifically
 #SBATCH --ntasks=1                      # Number of tasks (usually 1 for single-node jobs)
 #SBATCH --cpus-per-task=1               # Number of CPU cores per task (adjust based on your needs)
-#SBATCH --mem=128G                       # Memory per task
+#SBATCH --mem=128G                      # Memory per task
 #SBATCH --time=24:00:00                 # Maximum runtime (hrs:min:sec) - job will be killed after this
 #SBATCH --output=slurm_output/%j.out    # Standard output file (%j gets replaced with job ID)
 #SBATCH --error=slurm_output/%j.err     # Standard error file (%j gets replaced with job ID)
@@ -33,6 +33,7 @@ TIMESTAMP=$(date +%Y%m%d-%H%M%S)
 
 set -x
 
+# TRAIN_BATCH_SIZE / (NPROC_PER_NODE * MICRO_BATCH_SIZE_PER_GPU) should be an integer
 NPROC_PER_NODE=3
 MICRO_BATCH_SIZE_PER_GPU=5
 TRAIN_BATCH_SIZE=180
