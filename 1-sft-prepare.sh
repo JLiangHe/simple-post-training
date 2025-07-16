@@ -52,4 +52,4 @@ python -m src.data_processors.aggregate_and_split
 # (Optional) Process model
 # =============================
 # Add chat template to the base model based on lm_sft/scripts/template_format.json
-python -m src.model_processor
+#python -m src.model_processor

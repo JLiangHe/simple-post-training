@@ -5,9 +5,69 @@ from types import SimpleNamespace
 
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 from src.config_manager import load_config
-from src.data_processors.data_utils import convert_dataframe_to_messages_multiturn
 
 SAMPLE_SIZE = 400
+
+def convert_dataframe_to_messages(df):
+    """
+    Convert DataFrame with user_1, assistant_1, user_2, assistant_2, ..., system columns
+    to messages format for MultiTurnSFTDataset
+    
+    Args:
+        df: DataFrame with columns like user_1, assistant_1, user_2, assistant_2, system
+        
+    Returns:
+        List of dictionaries with "messages" key
+    """
+    results = []
+    
+    for idx, row in df.iterrows():
+        messages = []
+        
+        # Add system message first if present
+        if 'system' in row and pd.notna(row['system']) and str(row['system']).strip():
+            messages.append({
+                "role": "system",
+                "content": str(row['system']).strip()
+            })
+        
+        # Find all user and assistant columns
+        user_cols = [col for col in df.columns if col.startswith('user_')]
+        assistant_cols = [col for col in df.columns if col.startswith('assistant_')]
+        
+        # Sort by number to ensure correct order
+        user_cols.sort(key=lambda x: int(x.split('_')[1]))
+        assistant_cols.sort(key=lambda x: int(x.split('_')[1]))
+        
+        # Get the maximum turn number
+        max_user_turn = len(user_cols)
+        max_assistant_turn = len(assistant_cols)
+        max_turns = max(max_user_turn, max_assistant_turn)
+        
+        # Interleave user and assistant messages
+        for turn in range(1, max_turns + 1):
+            user_col = f"user_{turn}"
+            assistant_col = f"assistant_{turn}"
+            
+            # Add user message if present
+            if user_col in row and pd.notna(row[user_col]) and str(row[user_col]).strip():
+                messages.append({
+                    "role": "user",
+                    "content": str(row[user_col]).strip()
+                })
+            
+            # Add assistant message if present  
+            if assistant_col in row and pd.notna(row[assistant_col]) and str(row[assistant_col]).strip():
+                messages.append({
+                    "role": "assistant", 
+                    "content": str(row[assistant_col]).strip()
+                })
+        
+        # Only add if we have at least one message
+        if messages:
+            results.append({"messages": messages})
+    
+    return results
 
 def process_raw_conversations(dataset_path: str) -> pd.DataFrame:
     """
@@ -104,7 +164,6 @@ def process_raw_conversations(dataset_path: str) -> pd.DataFrame:
 
 def process_and_save_conversations(
     dataset_path: str,
-    template_path: str,
     output_path: str
 ) -> Optional[pd.DataFrame]:
     """
@@ -112,7 +171,6 @@ def process_and_save_conversations(
 
     Args:
         dataset_path (str): Path to the raw JSON conversation data.
-        template_path (str): Path to the JSON formatting template.
         output_path (str): Path to save the processed file (supports .csv and .parquet).
 
     Returns:
@@ -125,8 +183,8 @@ def process_and_save_conversations(
     print(f"Successfully loaded and processed {len(formatted_df)} conversations.")
     
     # Step 2: Format the data using the template (column-wise)
-    #formatted_df = format_multiturn_chat(df)#format_chat_data(df, template_path)
-    json_output = convert_dataframe_to_messages_multiturn(formatted_df)
+    #formatted_df = format_multiturn_chat(df)
+    json_output = convert_dataframe_to_messages(formatted_df)
     print("Formatting applied successfully.")
 
     # Step 3: Save the processed data based on the output file extension
@@ -164,18 +222,15 @@ def main():
     configs = load_config()
     
     DATASET = configs.source.data.input_path +"/SoftAge-AI_multi-turn_dataset/Multi-turn prompts.parquet"
-    TEMPLATE = configs.source.template.path
     OUTPUT = configs.source.data.output_path + "/SoftAge-AI/multi-turn_dataset.parquet"
 
     print(f"\nConfiguration:")
     print(f"  Input Dataset: {DATASET}")
-    print(f"  Template File: {TEMPLATE}")
     print(f"  Output File:   {OUTPUT}\n")
 
     try:
         json_output = process_and_save_conversations(
             dataset_path=DATASET,
-            template_path=TEMPLATE,
             output_path=OUTPUT
         )
 

@@ -5,9 +5,50 @@ from types import SimpleNamespace
 
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 from src.config_manager import load_config
-from src.data_processors.data_utils import convert_dataframe_to_messages
 
 SAMPLE_SIZE = 10000  
+
+def convert_dataframe_to_messages(df):
+    """
+    Convert DataFrame with columns ["system", "user", "assistant"] to messages format
+    
+    Args:
+        df: pandas DataFrame with columns ["system", "user", "assistant"]
+        
+    Returns:
+        List of dictionaries with "messages" key containing conversation format
+    """
+    results = []
+    
+    for idx, row in df.iterrows():
+        messages = []
+        
+        # Add system message if present and not null
+        if pd.notna(row["system"]) and row["system"].strip():
+            messages.append({
+                "role": "system", 
+                "content": row["system"].strip()
+            })
+        
+        # Add user message if present and not null
+        if pd.notna(row["user"]) and row["user"].strip():
+            messages.append({
+                "role": "user", 
+                "content": row["user"].strip()
+            })
+        
+        # Add assistant message if present and not null
+        if pd.notna(row["assistant"]) and row["assistant"].strip():
+            messages.append({
+                "role": "assistant", 
+                "content": row["assistant"].strip()
+            })
+        
+        # Only add if we have at least one message
+        if messages:
+            results.append({"messages": messages})
+    
+    return results
 
 
 def process_raw_conversations(dataset_path: str) -> pd.DataFrame:
@@ -96,7 +137,6 @@ def process_raw_conversations(dataset_path: str) -> pd.DataFrame:
 
 def process_and_save_conversations(
     dataset_path: str,
-    template_path: str,
     output_path: str
 ) -> Optional[pd.DataFrame]:
     """
@@ -104,7 +144,6 @@ def process_and_save_conversations(
 
     Args:
         dataset_path (str): Path to the raw JSON conversation data.
-        template_path (str): Path to the JSON formatting template.
         output_path (str): Path to save the processed file (supports .csv and .parquet).
 
     Returns:
@@ -160,18 +199,15 @@ def main():
     configs = load_config()
     
     DATASET = configs.source.data.input_path + "/teknium_OpenHermes-2.5/openhermes2_5.json"
-    TEMPLATE = configs.source.template.path
     OUTPUT = configs.source.data.output_path + "/teknium/OpenHermes-2.5.parquet"
 
     print(f"\nConfiguration:")
     print(f"  Input Dataset: {DATASET}")
-    print(f"  Template File: {TEMPLATE}")
     print(f"  Output File:   {OUTPUT}\n")
 
     try:
         json_output = process_and_save_conversations(
             dataset_path=DATASET,
-            template_path=TEMPLATE,
             output_path=OUTPUT
         )
 

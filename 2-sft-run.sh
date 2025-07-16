@@ -2,7 +2,7 @@
 #SBATCH --job-name=lm-sft     # Name of your job (will appear in squeue)
 #SBATCH --partition=gpu            # Which partition/queue to submit to (gpu partition for GPU jobs)
 #SBATCH --qos=qos_zhuoran_yang          # Quality of Service - our group's priority access tag
-#SBATCH --gres=gpu:h100:2               # Generic RESource - request 1 H100 GPU specifically
+#SBATCH --gres=gpu:h100:3               # Generic RESource - request 1 H100 GPU specifically
 #SBATCH --ntasks=1                      # Number of tasks (usually 1 for single-node jobs)
 #SBATCH --cpus-per-task=1               # Number of CPU cores per task (adjust based on your needs)
 #SBATCH --mem=32G                       # Memory per task
@@ -33,11 +33,11 @@ TIMESTAMP=$(date +%Y%m%d-%H%M%S)
 
 set -x
 
-NPROC_PER_NODE=2
-MICRO_BATCH_SIZE_PER_GPU=4
+NPROC_PER_NODE=3
+MICRO_BATCH_SIZE_PER_GPU=6
 TRAIN_BATCH_SIZE=128
 MAX_LENGTH=4096
-TOTAL_EPOCHS=3
+TOTAL_EPOCHS=2
 
 # Check if required directories exist
 if [ ! -d "$DATA_PATH" ]; then
@@ -71,6 +71,7 @@ torchrun --standalone --nnodes=1 --nproc_per_node=$NPROC_PER_NODE \
     data.train_batch_size=$TRAIN_BATCH_SIZE \
     data.max_length=$MAX_LENGTH\
     data.truncation=right \
+    optimizer.lr=5e-6 \
     model.partial_pretrain=$MODEL_PATH/$MODEL_NAME\
     model.enable_gradient_checkpointing=true \
     model.fsdp_config.cpu_offload=false \
