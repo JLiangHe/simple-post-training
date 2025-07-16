@@ -34,8 +34,8 @@ TIMESTAMP=$(date +%Y%m%d-%H%M%S)
 set -x
 
 NPROC_PER_NODE=3
-MICRO_BATCH_SIZE_PER_GPU=6
-TRAIN_BATCH_SIZE=128
+MICRO_BATCH_SIZE_PER_GPU=4
+TRAIN_BATCH_SIZE=192
 MAX_LENGTH=4096
 TOTAL_EPOCHS=2
 
@@ -71,7 +71,6 @@ torchrun --standalone --nnodes=1 --nproc_per_node=$NPROC_PER_NODE \
     data.train_batch_size=$TRAIN_BATCH_SIZE \
     data.max_length=$MAX_LENGTH\
     data.truncation=right \
-    optimizer.lr=5e-6 \
     model.partial_pretrain=$MODEL_PATH/$MODEL_NAME\
     model.enable_gradient_checkpointing=true \
     model.fsdp_config.cpu_offload=false \
@@ -85,3 +84,4 @@ torchrun --standalone --nnodes=1 --nproc_per_node=$NPROC_PER_NODE \
     trainer.default_hdfs_dir=null $@ \
     ulysses_sequence_parallel_size=1 \
     use_remove_padding=true
+    + optim.lr=5e-6

@@ -82,7 +82,7 @@ def convert_to_final_format(df: pd.DataFrame) -> List[Dict[str, Any]]:
         df (pd.DataFrame): The processed DataFrame.
 
     Returns:
-        List[Dict[str, Any]]: A list of dictionaries with 'tool' and 'message' keys.
+        List[Dict[str, Any]]: A list of dictionaries with 'tool' and 'messages' keys.
     """
     alist = []
     for _, row in df.iterrows():
@@ -90,7 +90,7 @@ def convert_to_final_format(df: pd.DataFrame) -> List[Dict[str, Any]]:
         tool_data = json.dumps(row["system"]) if row["system"] else "[]"
         alist.append({
             "tool": tool_data,
-            "message": row["conversations"]
+            "messages": [{'role': turn['from'], 'content': turn['value']} for turn in row['conversations']]
         })
     return alist
 
