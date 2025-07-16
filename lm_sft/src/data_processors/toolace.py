@@ -10,7 +10,7 @@ if project_root not in sys.path:
 
 from src.config_manager import load_config
 
-SAMPLE_SIZE = 1000
+SAMPLE_SIZE = 5000
 
 def extract_functions_from_text(text: str) -> List[Dict[str, Any]]:
     """
