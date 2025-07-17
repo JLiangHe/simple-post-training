@@ -2,7 +2,7 @@
 #SBATCH --job-name=lm-sft               # Name of your job (will appear in squeue)
 #SBATCH --partition=gpu                 # Which partition/queue to submit to (gpu partition for GPU jobs)
 #SBATCH --qos=qos_zhuoran_yang          # Quality of Service - our group's priority access tag
-#SBATCH --gres=gpu:h100:3               # Generic RESource - request 1 H100 GPU specifically
+#SBATCH --gres=gpu:h100:2               # Generic RESource - request 1 H100 GPU specifically
 #SBATCH --ntasks=1                      # Number of tasks (usually 1 for single-node jobs)
 #SBATCH --cpus-per-task=1               # Number of CPU cores per task (adjust based on your needs)
 #SBATCH --mem=128G                      # Memory per task
@@ -15,6 +15,8 @@ module load miniconda
 
 source ~/.bashrc
 conda activate llm_base
+
+nvidia-smi
 
 # Use absolute path to the project directory
 PROJECT_DIR="/gpfs/radev/home/jh3439/project/simple-post-training"
@@ -33,11 +35,10 @@ TIMESTAMP=$(date +%Y%m%d-%H%M%S)
 
 set -x
 
-# TRAIN_BATCH_SIZE / (NPROC_PER_NODE * MICRO_BATCH_SIZE_PER_GPU) should be an integer
-NPROC_PER_NODE=1
-MICRO_BATCH_SIZE_PER_GPU=1
-TRAIN_BATCH_SIZE=64
-MAX_LENGTH=1024
+NPROC_PER_NODE=2
+MICRO_BATCH_SIZE_PER_GPU=16
+TRAIN_BATCH_SIZE=128
+MAX_LENGTH=4096
 TOTAL_EPOCHS=2
 
 # Check if required directories exist
@@ -70,7 +71,7 @@ torchrun --standalone --nnodes=1 --nproc_per_node=$NPROC_PER_NODE \
     data.multiturn.messages_key=messages \
     data.micro_batch_size_per_gpu=$MICRO_BATCH_SIZE_PER_GPU \
     data.train_batch_size=$TRAIN_BATCH_SIZE \
-    data.max_length=$MAX_LENGTH\
+    data.max_length=$MAX_LENGTH \
     data.truncation=right \
     data.dataloader_num_workers=1 \
     optim.lr=5e-6 \
@@ -85,5 +86,5 @@ torchrun --standalone --nnodes=1 --nproc_per_node=$NPROC_PER_NODE \
     trainer.experiment_name=sft-${MODEL_NAME}-${TIMESTAMP}-GPU${NPROC_PER_NODE}-BATCH${MICRO_BATCH_SIZE_PER_GPU} \
     trainer.total_epochs=$TOTAL_EPOCHS \
     trainer.default_hdfs_dir=null $@ \
-    ulysses_sequence_parallel_size=1 \
+    ulysses_sequence_parallel_size=2 \
     use_remove_padding=true 

@@ -18,4 +18,3 @@ model:
 
 template:
   path: "scripts/template_format.json"
-
