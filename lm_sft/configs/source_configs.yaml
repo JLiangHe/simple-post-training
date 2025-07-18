@@ -6,6 +6,7 @@ data:
     #- teknium/OpenHermes-2.5
     #- SoftAge-AI/multi-turn_dataset
     - allenai/tulu-3-sft-mixture
+    - allenai/tulu-3-sft-personas-instruction-following
     - Team-ACE/ToolACE
   train_split: 0.9
 

@@ -5,8 +5,8 @@
 #SBATCH --gres=gpu:h100:2               # Generic RESource - request 1 H100 GPU specifically
 #SBATCH --ntasks=1                      # Number of tasks (usually 1 for single-node jobs)
 #SBATCH --cpus-per-task=1               # Number of CPU cores per task (adjust based on your needs)
-#SBATCH --mem=128G                      # Memory per task
-#SBATCH --time=24:00:00                 # Maximum runtime (hrs:min:sec) - job will be killed after this
+#SBATCH --mem=1024G                      # Memory per task
+#SBATCH --time=48:00:00                 # Maximum runtime (hrs:min:sec) - job will be killed after this
 #SBATCH --output=slurm_output/%j.out    # Standard output file (%j gets replaced with job ID)
 #SBATCH --error=slurm_output/%j.err     # Standard error file (%j gets replaced with job ID)
 #SBATCH --requeue                       # Automatically requeue job if preempted or failed

@@ -2,5 +2,6 @@
     "teknium/OpenHermes-2.5": "openhermes2_5",
     "SoftAge-AI/multi-turn_dataset": "softageai",
     "allenai/tulu-3-sft-mixture": "tulu_v3",
+    "allenai/tulu-3-sft-personas-instruction-following": "tulu_v3_if",
     "Team-ACE/ToolACE": "toolace"
 } 

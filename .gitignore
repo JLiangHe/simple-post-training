@@ -8,4 +8,5 @@ lm_sft/outputs/
 lm_sft/notebooks/
 
 slurm_output/
-lm_dpo
+lm_dpo/
+lm_grpo/     

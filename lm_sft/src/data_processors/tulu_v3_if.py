@@ -6,7 +6,7 @@ from types import SimpleNamespace
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 from src.config_manager import load_config
 
-SAMPLE_SIZE = 200000 
+SAMPLE_SIZE = 10000 
 
 def convert_dataframe_to_messages(df):
     """
@@ -45,8 +45,8 @@ def process_raw_conversations(dataset_path: str) -> pd.DataFrame:
         raise FileNotFoundError(f"Error: The directory was not found at {dataset_path}")
 
     dfs = []
-    for seq in range(6):
-        file_path = f'{dataset_path}/train-0000{seq}-of-00006.parquet'
+    for seq in range(1):
+        file_path = f'{dataset_path}/train-0000{seq}-of-00001.parquet'
         if not os.path.exists(file_path):
             raise FileNotFoundError(f"Error: The file was not found at {file_path}")
         df_part = pd.read_parquet(file_path)
@@ -73,8 +73,13 @@ def process_and_save_conversations(
     print("Starting data processing...")
     
     # Step 1: Load and process the raw data
-    df = process_raw_conversations(dataset_path).iloc[:SAMPLE_SIZE]
-    print(f"Successfully loaded and processed {len(df)} conversations (sampled).")
+    try:
+        df = process_raw_conversations(dataset_path).iloc[:SAMPLE_SIZE]
+        print(f"Successfully loaded and processed {len(df)} conversations (sampled).")
+    except Exception as e:
+        print(f"Failed to load {SAMPLE_SIZE} conversations due to: {e}. Loading full dataset instead.")
+        df = process_raw_conversations(dataset_path)
+        print(f"Successfully loaded and processed {len(df)} conversations (full dataset).")
 
     # Step 2: Save the processed data based on the output file extension
     output_dir = os.path.dirname(output_path)
@@ -107,12 +112,12 @@ def main():
     Main execution function to load configuration and run the data processing pipeline.
     This function is executed when the script is run directly.
     """
-    print("--- Starting Data Processing Pipeline for allenai/tulu-3-sft-mixture ---")
+    print("--- Starting Data Processing Pipeline for allenai/tulu-3-sft-personas-instruction-following ---")
     
     configs = load_config()
     
-    DATASET = configs.source.data.input_path + "/allenai_tulu-3-sft-mixture/data"
-    OUTPUT = configs.source.data.output_path + "/allenai/tulu-3-sft-mixture.parquet"
+    DATASET = configs.source.data.input_path + "/allenai_tulu-3-sft-personas-instruction-following/data"
+    OUTPUT = configs.source.data.output_path + "/allenai/tulu-3-sft-personas-instruction-following.parquet"
 
     print(f"\nConfiguration:")
     print(f"  Input Dataset: {DATASET}")
